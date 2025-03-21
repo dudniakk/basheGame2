@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра "Баше"</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        h1 { color: #2c3e50; }
+        button { font-size: 20px; padding: 10px 20px; cursor: pointer; transition: transform 0.2s; }
+        button:hover { transform: scale(1.1); }
+        .winner { animation: blink 0.5s infinite alternate; }
+        @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <h1>Гра "Баше"</h1>
+    <p>Є <span id="stones">20</span> каменів. Вибери, скільки взяти (1-3):</p>
+    <button onclick="takeStones(1)">Взяти 1 🪨</button>
+    <button onclick="takeStones(2)">Взяти 2 🪨</button>
+    <button onclick="takeStones(3)">Взяти 3 🪨</button>
+    <p id="status"></p>
+
+    <script>
+        let stones = 20;
+        let playerTurn = true;
+
+        function takeStones(amount) {
+            if (stones - amount < 0) return;
+            stones -= amount;
+            document.getElementById("stones").innerText = stones;
+            
+            if (stones === 0) {
+                document.getElementById("status").innerHTML = playerTurn ? 
+                    "<b class='winner'>🎉 Ти переміг!</b>" : "<b class='winner'>💀 Бот переміг!</b>";
+                sendScore(playerTurn ? 1 : 0); // Надсилаємо результат у бот
+                return;
+            }
+
+            playerTurn = !playerTurn;
+            if (!playerTurn) botMove();
+        }
+
+        function botMove() {
+            let botTake = Math.min(stones, Math.floor(Math.random() * 3) + 1);
+            setTimeout(() => {
+                takeStones(botTake);
+            }, 1000);
+        }
+
+        function sendScore(win) {
+            let botToken = "YOUR_BOT_TOKEN";  // Замінити на реальний токен
+            let chatId = "YOUR_CHAT_ID";  // Замінити на ID гравця
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=/addscore ${win ? 100 : 0}`);
+        }
+    </script>
+</body>
+</html>
