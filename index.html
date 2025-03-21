@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гра "Баше"</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        button { font-size: 20px; padding: 10px 20px; cursor: pointer; transition: transform 0.2s; }
+        button:hover { transform: scale(1.1); }
+        .winner { animation: blink 0.5s infinite alternate; }
+        @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
+    </style>
+</head>
+<body>
+    <h1>Гра "Баше"</h1>
+    <p>Натискай кнопки та перемагай!</p>
+    <button onclick="playGame()">🎮 Почати</button>
+
+    <script>
+        function playGame() {
+            let score = Math.floor(Math.random() * 100); // Симуляція гри
+            alert("Ви набрали " + score + " очок!");
+
+            // Відправляємо результат у Telegram
+            let botToken = "YOUR_BOT_TOKEN";  // Замінити на реальний токен
+            let chatId = "YOUR_CHAT_ID";  // Замінити на ID гравця
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=/addscore ${score}`);
+        }
+    </script>
+</body>
+</html>
